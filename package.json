@@ -1,6 +1,6 @@
 {
   "name": "@freddydrodev/react-image-upload",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Get the size of a JSON object in bytes",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,20 +16,22 @@
   "author": "Diomande Dro Freddy Junior",
   "license": "ISC",
   "devDependencies": {
-    "@swc/core": "^1.7.21",
-    "@types/dropzone": "^5.7.8",
-    "@types/node": "^22.5.1",
-    "@types/react": "^18.3.4",
-    "@types/react-dom": "^18.3.0",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "@swc/core": "^1.10.0",
+    "@types/dropzone": "^5.7.9",
+    "@types/node": "^22.10.1",
+    "@types/react": "^18.3.13",
+    "@types/react-dom": "^18.3.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@mui/icons-material": "^6.0.1",
-    "@mui/material": "^6.0.1",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/material": "^6.1.10",
     "dropzone": "6.0.0-beta.2",
+    "firebase": "^11.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-dropzone": "^14.2.3"
+    "react-dropzone": "^14.3.5"
   }
 }

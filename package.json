@@ -1,6 +1,6 @@
 {
   "name": "@freddydrodev/react-image-upload",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Get the size of a JSON object in bytes",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

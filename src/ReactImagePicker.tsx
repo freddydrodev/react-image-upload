@@ -47,8 +47,6 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
     maxFiles: maxFiles,
     multiple: maxFiles === 1 ? false : true,
     onDropRejected(fileRejections, event) {
-      console.log(fileRejections, event);
-
       const multipleText =
         fileRejections.length > 1
           ? "Fichiers ont été réfusés"
@@ -99,8 +97,6 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
     },
     [files]
   );
-
-  console.log(files);
 
   const reachedLimit = files.length >= maxFiles;
 

@@ -20,6 +20,10 @@ Dropzone.autoDiscover = false;
  * @param {string} [props.deleteIconColor="#ffffff"] - Color of the delete icon.
  * @param {(props: LocalImageType) => React.ReactNode} [props.localImage] - Custom component to render images.
  * @param {boolean} [props.hideTitle=false] - Flag to hide the title.
+ * @param {string} [props.sectionGap="15px"] - Gap between sections (ex: title, description, images, etc...) in pixels.
+ * @param {string} [props.imageGap="10px"] - Gap between images in pixels.
+ * @param {number} [props.imageGridCount=3] - The number of images to display in the grid.
+ * @param {string} [props.imageBorderRadius="15px"] - The border radius of the images.
  * @returns {JSX.Element} The ReactImagePicker component.
  */
 export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
@@ -33,9 +37,12 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
   deleteIconColor = "#ffffff",
   localImage,
   hideTitle = false,
-  sx = {},
-  sectionGap = "20px",
-  imageGap = "15px",
+  sectionGap = "15px",
+  imageGap = "10px",
+  imageGridCount = 3,
+  imageBorderRadius = "15px",
+  sx,
+  ...props
 }) => {
   /**
    * IMAGES SELECTED BY THE USER
@@ -100,7 +107,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
 
   const reachedLimit = files.length >= maxFiles;
 
-  let gridTemplateColumns = "1fr 1fr 1fr";
+  let gridTemplateColumns = `repeat(${imageGridCount}, 1fr)`;
   let size = 115;
 
   if (maxFiles === 1) {
@@ -115,6 +122,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
 
   return (
     <Stack
+      {...props}
       sx={{
         padding: "20px",
         boxSizing: "border-box",
@@ -189,7 +197,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
                 sx={{
                   width: "100%",
                   aspectRatio: maxFiles === 1 ? undefined : 1,
-                  borderRadius: 5,
+                  borderRadius: imageBorderRadius,
                   overflow: "hidden",
                   position: "relative",
                   margin: maxFiles === 1 ? "auto" : 0,
@@ -205,7 +213,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
                   sx={{
                     width: "100%",
                     height: "100%",
-                    borderRadius: 5,
+                    borderRadius: imageBorderRadius,
                     zIndex: 10,
                     position: "absolute",
                     top: 0,

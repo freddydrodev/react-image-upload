@@ -1,7 +1,7 @@
 {
   "name": "@freddydrodev/react-image-upload",
-  "version": "0.0.5",
-  "description": "Get the size of a JSON object in bytes",
+  "version": "0.0.6",
+  "description": "A React component for uploading images to Firebase Storage",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -16,24 +16,30 @@
   "author": "Diomande Dro Freddy Junior",
   "license": "ISC",
   "devDependencies": {
-    "@swc/core": "^1.10.0",
+    "@swc/core": "^1.11.18",
     "@types/dropzone": "^5.7.9",
-    "@types/node": "^22.10.1",
-    "@types/react": "^18.3.13",
-    "@types/react-dom": "^18.3.1",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
-    "@mui/material": "^6.1.10",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.0.1",
     "dropzone": "6.0.0-beta.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-dropzone": "^14.3.5"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-dropzone": "^14.3.8"
   },
   "peerDependencies": {
     "firebase": "^11.0.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "esbuild"
+    ]
   }
 }

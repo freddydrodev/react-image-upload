@@ -1,5 +1,5 @@
 import * as React$1 from 'react';
-import { SxProps, Theme } from '@mui/material';
+import { Stack } from '@mui/material';
 import { FirebaseStorage } from 'firebase/storage';
 
 /**
@@ -30,7 +30,7 @@ type UploadImageType = (args: UploadImageArgs) => Promise<string>;
 /**
  * The props that will be passed to the `ReactImagePicker` component
  */
-type ReactImagePickerProps = {
+type ReactImagePickerProps = React.ComponentProps<typeof Stack> & {
     /**
      * The function that will be called when the user selects new images
      */
@@ -72,10 +72,6 @@ type ReactImagePickerProps = {
      */
     hideTitle?: boolean;
     /**
-     * Custom styles for the wrapper component
-     */
-    sx?: SxProps<Theme> | undefined;
-    /**
      * Gap between sections (ex: title, description, images, etc...) in pixels
      */
     sectionGap?: string;
@@ -83,6 +79,14 @@ type ReactImagePickerProps = {
      * Gap between images in pixels
      */
     imageGap?: string;
+    /**
+     * The number of images to display in the grid
+     */
+    imageGridCount?: number;
+    /**
+     * The border radius of the images
+     */
+    imageBorderRadius?: string;
 };
 /**
  * The props that will be passed to the `localImage` component
@@ -128,6 +132,10 @@ type LocalImageType = {
  * @param {string} [props.deleteIconColor="#ffffff"] - Color of the delete icon.
  * @param {(props: LocalImageType) => React.ReactNode} [props.localImage] - Custom component to render images.
  * @param {boolean} [props.hideTitle=false] - Flag to hide the title.
+ * @param {string} [props.sectionGap="15px"] - Gap between sections (ex: title, description, images, etc...) in pixels.
+ * @param {string} [props.imageGap="10px"] - Gap between images in pixels.
+ * @param {number} [props.imageGridCount=3] - The number of images to display in the grid.
+ * @param {string} [props.imageBorderRadius="15px"] - The border radius of the images.
  * @returns {JSX.Element} The ReactImagePicker component.
  */
 declare const ReactImagePicker: React$1.FC<ReactImagePickerProps>;
@@ -142,4 +150,4 @@ declare const ReactImagePicker: React$1.FC<ReactImagePickerProps>;
  */
 declare const uploadImage: UploadImageType;
 
-export { type LocalImageType, type ReactImagePickerProps, type UploadImageArgs, type UploadImageType, ReactImagePicker as default, uploadImage };
+export { type LocalImageType, ReactImagePicker, type ReactImagePickerProps, type UploadImageArgs, type UploadImageType, ReactImagePicker as default, uploadImage };

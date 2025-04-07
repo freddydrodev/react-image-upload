@@ -1,4 +1,4 @@
-import type { SxProps, Theme } from "@mui/material";
+import type { Stack } from "@mui/material";
 import type { FirebaseStorage } from "firebase/storage";
 
 /**
@@ -31,7 +31,7 @@ export type UploadImageType = (args: UploadImageArgs) => Promise<string>;
 /**
  * The props that will be passed to the `ReactImagePicker` component
  */
-export type ReactImagePickerProps = {
+export type ReactImagePickerProps = React.ComponentProps<typeof Stack> & {
   /**
    * The function that will be called when the user selects new images
    */
@@ -74,11 +74,6 @@ export type ReactImagePickerProps = {
   hideTitle?: boolean;
 
   /**
-   * Custom styles for the wrapper component
-   */
-  sx?: SxProps<Theme> | undefined;
-
-  /**
    * Gap between sections (ex: title, description, images, etc...) in pixels
    */
   sectionGap?: string;
@@ -87,6 +82,16 @@ export type ReactImagePickerProps = {
    * Gap between images in pixels
    */
   imageGap?: string;
+
+  /**
+   * The number of images to display in the grid
+   */
+  imageGridCount?: number;
+
+  /**
+   * The border radius of the images
+   */
+  imageBorderRadius?: string;
 };
 
 /**

@@ -317,88 +317,93 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
         isDisabled={reachedLimit}
       >
         <input {...getInputProps()} />
+
         {!hideTitle && <Title>{label}</Title>}
-        <Description>
-          {description ?? "Vous pouvez ajouter les images en cliquant ici."}
-        </Description>
 
-        <ImageGrid
-          gridColumns="value"
-          style={
-            {
-              "--grid-columns-value": imageGridCount,
-              "--image-gap-value": imageGap,
-              "--image-border-radius-value": imageBorderRadius,
-            } as React.CSSProperties
-          }
-        >
-          {files.map((file) => {
-            const fileIsString = typeof file === "string";
+        {!reachedLimit && (
+          <Description>
+            {description ?? "Vous pouvez ajouter les images en cliquant ici."}
+          </Description>
+        )}
 
-            const _file = fileIsString
-              ? { name: file as string, preview: file as string }
-              : (file as File);
+        {files.length > 0 && (
+          <ImageGrid
+            gridColumns="value"
+            style={
+              {
+                "--grid-columns-value": imageGridCount,
+                "--image-gap-value": imageGap,
+                "--image-border-radius-value": imageBorderRadius,
+              } as React.CSSProperties
+            }
+          >
+            {files.map((file) => {
+              const fileIsString = typeof file === "string";
 
-            const src =
-              typeof _file === "string" ? _file : (_file as any).preview;
+              const _file = fileIsString
+                ? { name: file as string, preview: file as string }
+                : (file as File);
 
-            const imgProps: renderImageType = {
-              src: src,
-              width: size,
-              height: size,
-              style: {
-                objectFit: "cover",
-                ...(maxFiles === 1 ? {} : { width: "100%", height: "100%" }),
-              },
-              alt: typeof _file === "string" ? _file : (_file as any).name,
-            };
+              const src =
+                typeof _file === "string" ? _file : (_file as any).preview;
 
-            return (
-              <ImageContainer key={src} singleImage={maxFiles === 1}>
-                {renderImage ? renderImage(imgProps) : <img {...imgProps} />}
-                <Overlay>
-                  <DeleteButton
-                    color="default"
-                    onClick={(e) => {
-                      const _files = [
-                        ...files.filter((f) => {
-                          const isString = typeof f === "string";
-                          const name = isString
-                            ? (f as string)
-                            : (f as File).name;
+              const imgProps: renderImageType = {
+                src: src,
+                width: size,
+                height: size,
+                style: {
+                  objectFit: "cover",
+                  ...(maxFiles === 1 ? {} : { width: "100%", height: "100%" }),
+                },
+                alt: typeof _file === "string" ? _file : (_file as any).name,
+              };
 
-                          return name !== _file.name;
-                        }),
-                      ];
+              return (
+                <ImageContainer key={src} singleImage={maxFiles === 1}>
+                  {renderImage ? renderImage(imgProps) : <img {...imgProps} />}
+                  <Overlay>
+                    <DeleteButton
+                      color="default"
+                      onClick={(e) => {
+                        const _files = [
+                          ...files.filter((f) => {
+                            const isString = typeof f === "string";
+                            const name = isString
+                              ? (f as string)
+                              : (f as File).name;
 
-                      setFiles(_files);
+                            return name !== _file.name;
+                          }),
+                        ];
 
-                      onImagesChanged(_files);
+                        setFiles(_files);
 
-                      e.stopPropagation();
-                    }}
-                  >
-                    {deleteIcon ?? <DeleteIcon />}
-                  </DeleteButton>
-                </Overlay>
-              </ImageContainer>
-            );
-          })}
-        </ImageGrid>
+                        onImagesChanged(_files);
+
+                        e.stopPropagation();
+                      }}
+                    >
+                      {deleteIcon ?? <DeleteIcon />}
+                    </DeleteButton>
+                  </Overlay>
+                </ImageContainer>
+              );
+            })}
+          </ImageGrid>
+        )}
+
         <Message hasError={!!validationMessage || reachedLimit || hasError}>
           {hasError
             ? message ?? "An error occurred"
             : isValidating
             ? "Validating..."
-            : validationMessage ||
-              (reachedLimit
-                ? maxFilesMessage ?? `Maximum ${maxFiles} files allowed`
-                : message ??
-                  `Files up to ${
-                    (maxSize ?? 5 * 1024 * 1024) / (1024 * 1024)
-                  }MB, max ${maxFiles} files, accepted formats: ${
-                    Array.isArray(accepted) ? accepted.join(", ") : accepted
-                  }`)}
+            : validationMessage ??
+              message ??
+              `Files up to ${
+                (maxSize ?? 5 * 1024 * 1024) / (1024 * 1024)
+              }MB, max ${maxFiles} files, accepted formats: ${
+                Array.isArray(accepted) ? accepted.join(", ") : accepted
+              }`}
         </Message>
       </DropzoneContainer>
     </Container>

@@ -1,12 +1,14 @@
 import { styled } from "@stitches/react";
 
 export const Container = styled("div", {
-  padding: "20px",
-  boxSizing: "border-box",
-  aspectRatio: 1,
-  width: 400,
+  // padding: "20px",
+  // boxSizing: "border-box",
+  // width: 400,
   display: "flex",
   flexDirection: "column",
+  border: "1px dashed #e0e0e0",
+  // borderRadius: "15px",
+  // backgroundColor: "rgba(0, 0, 0, 0.015)",
 });
 
 export const DropzoneContainer = styled("div", {
@@ -29,6 +31,7 @@ export const Title = styled("h2", {
   lineHeight: "1em",
   textAlign: "center",
   margin: 0,
+  marginTop: "15px",
 });
 
 export const Description = styled("p", {
@@ -37,9 +40,17 @@ export const Description = styled("p", {
   lineHeight: "1.3em",
   textAlign: "center",
   margin: 0,
+});
+
+export const Message = styled("p", {
+  fontSize: "0.75rem",
+  lineHeight: "1.66",
+  textAlign: "center",
+  margin: 0,
+  color: "rgba(0, 0, 0, 0.5)",
   variants: {
     hasError: {
-      true: { color: "#d32f2f" },
+      true: { color: "#d32f2f", fontSize: "0.8rem" },
       false: { color: "inherit" },
     },
   },

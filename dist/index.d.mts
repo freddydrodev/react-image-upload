@@ -85,6 +85,15 @@ type ReactImagePickerProps = {
      */
     description?: string;
     /**
+     * The message to display below the images
+     */
+    message?: string;
+    /**
+     * Whether or not to display the message as an error
+     * @default false
+     */
+    hasError?: boolean;
+    /**
      * Validation function that takes current images and returns either null (valid) or an error message
      * Can be async to perform online validation
      */

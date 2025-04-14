@@ -17,6 +17,7 @@ import {
   ImageContainer,
   DeleteButton,
   Overlay,
+  Message,
 } from "./styles";
 
 Dropzone.autoDiscover = false;
@@ -134,6 +135,8 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
   imageBorderRadius = "15px",
   style,
   className,
+  message,
+  hasError = false,
   ...props
 }) => {
   const { value: maxFiles, message: maxFilesMessage } = getRuleValueAndMessage(
@@ -215,16 +218,33 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
         return error.message;
       });
 
-      alert(errors.join("\n"));
+      console.log("ERRORS REJECTED =>", errors);
+
+      const uniqueErrors = errors.filter(
+        (error, index, self) => self.indexOf(error) === index
+      );
+
+      setValidationMessage(uniqueErrors.join("\n"));
     },
     onDrop: (acceptedFiles) => {
+      // Check if adding these files would exceed the maximum
+      if (maxFiles && files.length + acceptedFiles.length > maxFiles) {
+        setValidationMessage(
+          maxFilesMessage ??
+            `Maximum ${maxFiles} file${maxFiles === 1 ? "" : "s"} allowed`
+        );
+        return;
+      }
+
       // Validate each file against rules
       const validationErrors = acceptedFiles
         .map((file) => validateFile(file, rules))
         .filter((error): error is string => error !== null);
 
+      console.log("ERRORS =>", validationErrors);
+
       if (validationErrors.length > 0) {
-        alert(validationErrors.join("\n"));
+        setValidationMessage(validationErrors.join("\n"));
         return;
       }
 
@@ -288,6 +308,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
   const reachedLimit = maxFiles ? files.length >= maxFiles : false;
 
   let gridTemplateColumns = `repeat(${imageGridCount}, 1fr)`;
+
   let size = 115;
 
   if (maxFiles === 1) {
@@ -308,16 +329,10 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
       >
         <input {...getInputProps()} />
         {!hideTitle && <Title>{label}</Title>}
-        <Description hasError={!!validationMessage}>
-          {isValidating
-            ? "Validating..."
-            : validationMessage ??
-              description ??
-              (!reachedLimit
-                ? "Vous pouvez ajouter les images en cliquant ici."
-                : maxFilesMessage ??
-                  `Vous avez ajouté le maximum d'Images possible (${maxFiles})`)}
+        <Description>
+          {description ?? "Vous pouvez ajouter les images en cliquant ici."}
         </Description>
+
         <ImageGrid
           gridColumns="value"
           style={
@@ -381,6 +396,21 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
             );
           })}
         </ImageGrid>
+        <Message hasError={!!validationMessage || reachedLimit || hasError}>
+          {hasError
+            ? message ?? "An error occurred"
+            : isValidating
+            ? "Validating..."
+            : validationMessage ||
+              (reachedLimit
+                ? maxFilesMessage ?? `Maximum ${maxFiles} files allowed`
+                : message ??
+                  `Files up to ${
+                    (maxSize ?? 5 * 1024 * 1024) / (1024 * 1024)
+                  }MB, max ${maxFiles} files, accepted formats: ${
+                    Array.isArray(accepted) ? accepted.join(", ") : accepted
+                  }`)}
+        </Message>
       </DropzoneContainer>
     </Container>
   );

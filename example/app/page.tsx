@@ -23,13 +23,15 @@ export default function Home() {
               value: 2 * 1024 * 1024,
               message: "Images must be smaller than 2MB",
             },
-            maxFiles: 3,
+            maxFiles: {
+              value: 2,
+              message: "Only 2 images are allowed",
+            },
             accepted: {
               value: [".jpg", ".png"],
               message: "Only JPG and PNG files are allowed",
             },
           }}
-          description="Upload your images here"
           imageGridCount={4}
         />
       )}

@@ -1,6 +1,6 @@
 {
   "name": "@freddydrodev/react-image-upload",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "A React component for uploading images to Firebase Storage",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

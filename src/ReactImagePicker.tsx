@@ -7,7 +7,6 @@ import {
   FileValidationRules,
   RuleWithMessage,
 } from "./types";
-import { styled } from "@stitches/react";
 import {
   Container,
   DropzoneContainer,
@@ -227,6 +226,8 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
       setValidationMessage(uniqueErrors.join("\n"));
     },
     onDrop: (acceptedFiles) => {
+      setValidationMessage(null);
+
       // Check if adding these files would exceed the maximum
       if (maxFiles && files.length + acceptedFiles.length > maxFiles) {
         setValidationMessage(
@@ -307,19 +308,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
 
   const reachedLimit = maxFiles ? files.length >= maxFiles : false;
 
-  let gridTemplateColumns = `repeat(${imageGridCount}, 1fr)`;
-
   let size = 115;
-
-  if (maxFiles === 1) {
-    gridTemplateColumns = "1fr";
-    size = 200;
-  }
-
-  if (maxFiles === 2) {
-    gridTemplateColumns = "1fr 1fr";
-    size = 175;
-  }
 
   return (
     <Container className={className} style={style}>

@@ -1,1 +1,821 @@
-"use strict";function e(e,t){if(t==null||t>e.length)t=e.length;for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r];return n}function t(e){if(Array.isArray(e))return e}function r(t){if(Array.isArray(t))return e(t)}function n(e,t,r,n,o,a,i){try{var l=e[a](i);var u=l.value}catch(e){r(e);return}if(l.done){t(u)}else{Promise.resolve(u).then(n,o)}}function o(e){return function(){var t=this,r=arguments;return new Promise(function(o,a){var i=e.apply(t,r);function l(e){n(i,o,a,l,u,"next",e)}function u(e){n(i,o,a,l,u,"throw",e)}l(undefined)})}}function a(e,t,r){if(t in e){Object.defineProperty(e,t,{value:r,enumerable:true,configurable:true,writable:true})}else{e[t]=r}return e}function i(e){if(typeof Symbol!=="undefined"&&e[Symbol.iterator]!=null||e["@@iterator"]!=null)return Array.from(e)}function l(e,t){var r=e==null?null:typeof Symbol!=="undefined"&&e[Symbol.iterator]||e["@@iterator"];if(r==null)return;var n=[];var o=true;var a=false;var i,l;try{for(r=r.call(e);!(o=(i=r.next()).done);o=true){n.push(i.value);if(t&&n.length===t)break}}catch(e){a=true;l=e}finally{try{if(!o&&r["return"]!=null)r["return"]()}finally{if(a)throw l}}return n}function u(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}function c(){throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}function f(e){for(var t=1;t<arguments.length;t++){var r=arguments[t]!=null?arguments[t]:{};var n=Object.keys(r);if(typeof Object.getOwnPropertySymbols==="function"){n=n.concat(Object.getOwnPropertySymbols(r).filter(function(e){return Object.getOwnPropertyDescriptor(r,e).enumerable}))}n.forEach(function(t){a(e,t,r[t])})}return e}function s(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);if(t){n=n.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})}r.push.apply(r,n)}return r}function p(e,t){t=t!=null?t:{};if(Object.getOwnPropertyDescriptors){Object.defineProperties(e,Object.getOwnPropertyDescriptors(t))}else{s(Object(t)).forEach(function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(t,r))})}return e}function m(e,t){if(e==null)return{};var r=d(e,t);var n,o;if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(e);for(o=0;o<a.length;o++){n=a[o];if(t.indexOf(n)>=0)continue;if(!Object.prototype.propertyIsEnumerable.call(e,n))continue;r[n]=e[n]}}return r}function d(e,t){if(e==null)return{};var r={};var n=Object.keys(e);var o,a;for(a=0;a<n.length;a++){o=n[a];if(t.indexOf(o)>=0)continue;r[o]=e[o]}return r}function b(e,r){return t(e)||l(e,r)||v(e,r)||u()}function g(e){return r(e)||i(e)||v(e)||c()}function y(e){"@swc/helpers - typeof";return e&&typeof Symbol!=="undefined"&&e.constructor===Symbol?"symbol":typeof e}function v(t,r){if(!t)return;if(typeof t==="string")return e(t,r);var n=Object.prototype.toString.call(t).slice(8,-1);if(n==="Object"&&t.constructor)n=t.constructor.name;if(n==="Map"||n==="Set")return Array.from(n);if(n==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return e(t,r)}function h(e,t){var r,n,o,a,i={label:0,sent:function(){if(o[0]&1)throw o[1];return o[1]},trys:[],ops:[]};return a={next:l(0),"throw":l(1),"return":l(2)},typeof Symbol==="function"&&(a[Symbol.iterator]=function(){return this}),a;function l(e){return function(t){return u([e,t])}}function u(a){if(r)throw new TypeError("Generator is already executing.");while(i)try{if(r=1,n&&(o=a[0]&2?n["return"]:a[0]?n["throw"]||((o=n["return"])&&o.call(n),0):n.next)&&!(o=o.call(n,a[1])).done)return o;if(n=0,o)a=[a[0]&2,o.value];switch(a[0]){case 0:case 1:o=a;break;case 4:i.label++;return{value:a[1],done:false};case 5:i.label++;n=a[1];a=[0];continue;case 7:a=i.ops.pop();i.trys.pop();continue;default:if(!(o=i.trys,o=o.length>0&&o[o.length-1])&&(a[0]===6||a[0]===2)){i=0;continue}if(a[0]===3&&(!o||a[1]>o[0]&&a[1]<o[3])){i.label=a[1];break}if(a[0]===6&&i.label<o[1]){i.label=o[1];o=a;break}if(o&&i.label<o[2]){i.label=o[2];i.ops.push(a);break}if(o[2])i.ops.pop();i.trys.pop();continue}a=t.call(e,i)}catch(e){a=[6,e];n=0}finally{r=o=0}if(a[0]&5)throw a[1];return{value:a[0]?a[1]:void 0,done:true}}}var w=Object.create;var O=Object.defineProperty;var x=Object.getOwnPropertyDescriptor;var j=Object.getOwnPropertyNames;var S=Object.getPrototypeOf,I=Object.prototype.hasOwnProperty;var P=function(e,t){for(var r in t)O(e,r,{get:t[r],enumerable:!0})},E=function(e,t,r,n){var o=true,a=false,i=undefined;if(t&&(typeof t==="undefined"?"undefined":y(t))=="object"||typeof t=="function")try{var l=function(){var o=c.value;!I.call(e,o)&&o!==r&&O(e,o,{get:function(){return t[o]},enumerable:!(n=x(t,o))||n.enumerable})};for(var u=j(t)[Symbol.iterator](),c;!(o=(c=u.next()).done);o=true)l()}catch(e){a=true;i=e}finally{try{if(!o&&u.return!=null){u.return()}}finally{if(a){throw i}}}return e};var k=function(e,t,r){return r=e!=null?w(S(e)):{},E(t||!e||!e.__esModule?O(r,"default",{value:e,enumerable:!0}):r,e)},R=function(e){return E(O({},"__esModule",{value:!0}),e)};var z={};P(z,{ReactImagePicker:function(){return F},default:function(){return L},uploadImage:function(){return G}});module.exports=R(z);var C=k(require("react")),A=k(require("dropzone")),D=require("@mui/material"),V=require("react-dropzone");A.default.autoDiscover=!1;var F=function(e){var t=e.initImages,r=t===void 0?[]:t,n=e.onImageChange,o=e.maxFiles,a=o===void 0?1:o,i=e.label,l=i===void 0?"Images":i,u=e.description,c=e.deleteIcon,s=e.deleteBtnColor,d=s===void 0?"#f44336":s,y=e.deleteIconColor,v=y===void 0?"#ffffff":y,h=e.localImage,w=e.hideTitle,O=w===void 0?!1:w,x=e.sectionGap,j=x===void 0?"15px":x,S=e.imageGap,I=S===void 0?"10px":S,P=e.imageGridCount,E=P===void 0?3:P,k=e.imageBorderRadius,R=k===void 0?"15px":k,z=e.sx,A=m(e,["initImages","onImageChange","maxFiles","label","description","deleteIcon","deleteBtnColor","deleteIconColor","localImage","hideTitle","sectionGap","imageGap","imageGridCount","imageBorderRadius","sx"]);var F=b(C.useState(r),2),_=F[0],G=F[1],L=(0,V.useDropzone)({accept:{"image/*":[]},minSize:1024,maxFiles:a,multiple:a!==1,onDropRejected:function e(e,t){var r=e.length>1?"Fichiers ont \xe9t\xe9 r\xe9fus\xe9s":"Fichier a \xe9t\xe9 r\xe9fus\xe9";alert("".concat(e.length," ").concat(r,"."))},onDrop:function(e){var t=g(_).concat(g(e.map(function(e){return Object.assign(e,{preview:URL.createObjectURL(e)})}).filter(function(e){return _.filter(function(t){return typeof t=="string"?!1:t.name===e.name}).length===0})));G(t),n&&n(t)}}),M=L.getRootProps,U=L.getInputProps;C.useEffect(function(){return function(){_.forEach(function(e){return URL.revokeObjectURL(e.preview)})}},[_]);var q=_.length>=a,B="repeat(".concat(E,", 1fr)"),H=115;return a===1&&(B="1fr",H=200),a===2&&(B="1fr 1fr",H=175),C.createElement(D.Stack,p(f({},A),{sx:p(f({padding:"20px",boxSizing:"border-box",aspectRatio:1,width:400},z),{"& .dropzone":{border:0,p:0},overflow:"visible"})}),C.createElement(D.Stack,p(f({},q?{}:M({className:"dropzone"})),{spacing:j,sx:{cursor:q?"auto":"pointer"}}),C.createElement("input",f({},U())),!O&&C.createElement(D.Typography,{fontWeight:700,fontSize:"2rem",lineHeight:"1em",textAlign:"center"},l),C.createElement(D.Typography,{fontWeight:500,fontSize:"1rem",lineHeight:"1.3em",textAlign:"center"},u!==null&&u!==void 0?u:q?"Vous avez ajout\xe9 le maximum d'Images possible":"Vous pouvez ajouter les images en cliquant ici."),C.createElement(D.Stack,{display:"grid",sx:{gridTemplateColumns:B,gap:I,maxHeight:380}},_.map(function(e){var t=typeof e=="string"?{name:e,preview:e}:e,r=typeof t=="string"?t:t.preview,o={src:r,width:H,height:H,style:f({objectFit:"cover"},a===1?{}:{width:"100%",height:"100%"}),alt:typeof t=="string"?t:t.name};return C.createElement(D.Stack,{alignItems:"center",justifyContent:"center",display:"flex",sx:{width:"100%",aspectRatio:a===1?void 0:1,borderRadius:R,overflow:"hidden",position:"relative",margin:a===1?"auto":0,boxShadow:"rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"},key:r},h?h(o):C.createElement("img",f({},o)),C.createElement(D.Stack,{alignItems:"center",justifyContent:"center",sx:{width:"100%",height:"100%",borderRadius:R,zIndex:10,position:"absolute",top:0,left:0,bgcolor:"rgba(255,255,255,0)",backdropFilter:"blur(0)",transition:"all linear 0.25s",opacity:0,"&:hover":{bgcolor:"rgba(255,255,255,0.25)",backdropFilter:"blur(5px)",opacity:1}}},C.createElement(D.Fab,{size:"small",color:"error",sx:{boxShadow:"none",bgcolor:d,color:v},onClick:function(e){var r=g(_.filter(function(e){return(typeof e=="string"?e:e.name)!==t.name}));G(r),n(r),e.stopPropagation()}},c!==null&&c!==void 0?c:C.createElement(T,null))))})),C.createElement(D.Typography,{variant:"caption",textAlign:"center"},"Le nombre maximum d'image est ",a)))},T=function(){return C.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:"16",height:"16",fill:"currentColor",className:"bi bi-trash",viewBox:"0 0 16 16"},C.createElement("path",{d:"M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"}),C.createElement("path",{d:"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"}))};var _=require("firebase/storage"),G=/*#__PURE__*/function(){var e=o(function(e){var t,r,n,o,a,i,l,u,c,f;return h(this,function(s){switch(s.label){case 0:t=e.file,r=e.storage,n=e.isProd,o=n===void 0?!1:n,a=e.path,i=a===void 0?"Images":a;if(typeof t=="string")return[2,t];l=i.endsWith("/")?i.slice(0,-1):i;l.trim().length||(l="Images");u="".concat(o?"":"DEV/").concat(l,"/").concat(t.name),c=(0,_.ref)(r,u),f=(0,_.uploadBytesResumable)(c,t);return[4,f];case 1:s.sent();return[4,(0,_.getDownloadURL)(f.snapshot.ref)];case 2:return[2,s.sent()]}})});return function t(t){return e.apply(this,arguments)}}();var L=F;0&&(module.exports={ReactImagePicker:ReactImagePicker,uploadImage:uploadImage});//# sourceMappingURL=index.js.map
+"use strict";
+function _array_like_to_array(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function _array_with_holes(arr) {
+    if (Array.isArray(arr)) return arr;
+}
+function _array_without_holes(arr) {
+    if (Array.isArray(arr)) return _array_like_to_array(arr);
+}
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) {
+        resolve(value);
+    } else {
+        Promise.resolve(value).then(_next, _throw);
+    }
+}
+function _async_to_generator(fn) {
+    return function() {
+        var self = this, args = arguments;
+        return new Promise(function(resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+function _define_property(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, {
+            value: value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        });
+    } else {
+        obj[key] = value;
+    }
+    return obj;
+}
+function _instanceof(left, right) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else {
+        return left instanceof right;
+    }
+}
+function _iterable_to_array(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _iterable_to_array_limit(arr, i) {
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _s, _e;
+    try {
+        for(_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true){
+            _arr.push(_s.value);
+            if (i && _arr.length === i) break;
+        }
+    } catch (err) {
+        _d = true;
+        _e = err;
+    } finally{
+        try {
+            if (!_n && _i["return"] != null) _i["return"]();
+        } finally{
+            if (_d) throw _e;
+        }
+    }
+    return _arr;
+}
+function _non_iterable_rest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _non_iterable_spread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _object_spread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+            }));
+        }
+        ownKeys.forEach(function(key) {
+            _define_property(target, key, source[key]);
+        });
+    }
+    return target;
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) {
+            symbols = symbols.filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+            });
+        }
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = source != null ? source : {};
+    if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+        ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _object_without_properties(source, excluded) {
+    if (source == null) return {};
+    var target = _object_without_properties_loose(source, excluded);
+    var key, i;
+    if (Object.getOwnPropertySymbols) {
+        var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+        for(i = 0; i < sourceSymbolKeys.length; i++){
+            key = sourceSymbolKeys[i];
+            if (excluded.indexOf(key) >= 0) continue;
+            if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+function _object_without_properties_loose(source, excluded) {
+    if (source == null) return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+    for(i = 0; i < sourceKeys.length; i++){
+        key = sourceKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        target[key] = source[key];
+    }
+    return target;
+}
+function _sliced_to_array(arr, i) {
+    return _array_with_holes(arr) || _iterable_to_array_limit(arr, i) || _unsupported_iterable_to_array(arr, i) || _non_iterable_rest();
+}
+function _to_consumable_array(arr) {
+    return _array_without_holes(arr) || _iterable_to_array(arr) || _unsupported_iterable_to_array(arr) || _non_iterable_spread();
+}
+function _type_of(obj) {
+    "@swc/helpers - typeof";
+    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
+}
+function _unsupported_iterable_to_array(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
+}
+function _ts_generator(thisArg, body) {
+    var f, y, t, g, _ = {
+        label: 0,
+        sent: function() {
+            if (t[0] & 1) throw t[1];
+            return t[1];
+        },
+        trys: [],
+        ops: []
+    };
+    return g = {
+        next: verb(0),
+        "throw": verb(1),
+        "return": verb(2)
+    }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+        return this;
+    }), g;
+    function verb(n) {
+        return function(v) {
+            return step([
+                n,
+                v
+            ]);
+        };
+    }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while(_)try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [
+                op[0] & 2,
+                t.value
+            ];
+            switch(op[0]){
+                case 0:
+                case 1:
+                    t = op;
+                    break;
+                case 4:
+                    _.label++;
+                    return {
+                        value: op[1],
+                        done: false
+                    };
+                case 5:
+                    _.label++;
+                    y = op[1];
+                    op = [
+                        0
+                    ];
+                    continue;
+                case 7:
+                    op = _.ops.pop();
+                    _.trys.pop();
+                    continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                        _ = 0;
+                        continue;
+                    }
+                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                        _.label = op[1];
+                        break;
+                    }
+                    if (op[0] === 6 && _.label < t[1]) {
+                        _.label = t[1];
+                        t = op;
+                        break;
+                    }
+                    if (t && _.label < t[2]) {
+                        _.label = t[2];
+                        _.ops.push(op);
+                        break;
+                    }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop();
+                    continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) {
+            op = [
+                6,
+                e
+            ];
+            y = 0;
+        } finally{
+            f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
+        return {
+            value: op[0] ? op[1] : void 0,
+            done: true
+        };
+    }
+}
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = function(target, all) {
+    for(var name in all)__defProp(target, name, {
+        get: all[name],
+        enumerable: true
+    });
+};
+var __copyProps = function(to, from, except, desc) {
+    if (from && (typeof from === "undefined" ? "undefined" : _type_of(from)) === "object" || typeof from === "function") {
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            var _loop = function() {
+                var key = _step.value;
+                if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+                    get: function() {
+                        return from[key];
+                    },
+                    enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+                });
+            };
+            for(var _iterator = __getOwnPropNames(from)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true)_loop();
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+    }
+    return to;
+};
+var __toESM = function(mod, isNodeMode, target) {
+    return target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(// If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", {
+        value: mod,
+        enumerable: true
+    }) : target, mod);
+};
+var __toCommonJS = function(mod) {
+    return __copyProps(__defProp({}, "__esModule", {
+        value: true
+    }), mod);
+};
+// src/index.tsx
+var index_exports = {};
+__export(index_exports, {
+    ReactImagePicker: function() {
+        return ReactImagePicker;
+    },
+    default: function() {
+        return index_default;
+    },
+    uploadImage: function() {
+        return uploadImage;
+    }
+});
+module.exports = __toCommonJS(index_exports);
+// src/ReactImagePicker.tsx
+var React = __toESM(require("react"));
+var import_dropzone = __toESM(require("dropzone"));
+var import_react_dropzone = require("react-dropzone");
+// src/styles.ts
+var import_react = require("@stitches/react");
+var Container = (0, import_react.styled)("div", {
+    padding: "20px",
+    boxSizing: "border-box",
+    aspectRatio: 1,
+    width: 400,
+    display: "flex",
+    flexDirection: "column"
+});
+var DropzoneContainer = (0, import_react.styled)("div", {
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
+    border: 0,
+    padding: 0,
+    variants: {
+        isDisabled: {
+            true: {
+                cursor: "auto"
+            },
+            false: {
+                cursor: "pointer"
+            }
+        }
+    }
+});
+var Title = (0, import_react.styled)("h2", {
+    fontWeight: 700,
+    fontSize: "2rem",
+    lineHeight: "1em",
+    textAlign: "center",
+    margin: 0
+});
+var Description = (0, import_react.styled)("p", {
+    fontWeight: 500,
+    fontSize: "1rem",
+    lineHeight: "1.3em",
+    textAlign: "center",
+    margin: 0,
+    variants: {
+        hasError: {
+            true: {
+                color: "#d32f2f"
+            },
+            false: {
+                color: "inherit"
+            }
+        }
+    }
+});
+var ImageGrid = (0, import_react.styled)("div", {
+    display: "grid",
+    maxHeight: 380,
+    gridTemplateColumns: "repeat(var(--grid-columns, 3), 1fr)",
+    gap: "var(--image-gap, 10px)",
+    variants: {
+        gridColumns: {
+            value: {
+                "--grid-columns": "var(--grid-columns-value, 3)",
+                "--image-gap": "var(--image-gap-value, 10px)"
+            }
+        }
+    },
+    defaultVariants: {
+        gridColumns: "value"
+    }
+});
+var ImageContainer = (0, import_react.styled)("div", {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    borderRadius: "var(--image-border-radius-value, 15px)",
+    overflow: "hidden",
+    "& img": {
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: "var(--image-border-radius-value, 15px)"
+    },
+    variants: {
+        singleImage: {
+            true: {
+                maxWidth: "400px",
+                margin: "0 auto"
+            }
+        }
+    }
+});
+var DeleteButton = (0, import_react.styled)("button", {
+    width: 32,
+    height: 32,
+    borderRadius: "50%",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 0,
+    boxShadow: "none",
+    variants: {
+        color: {
+            default: {
+                backgroundColor: "#f44336",
+                color: "#ffffff"
+            }
+        }
+    }
+});
+var Overlay = (0, import_react.styled)("div", {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    borderRadius: "15px",
+    zIndex: 10,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    backgroundColor: "rgba(255,255,255,0)",
+    backdropFilter: "blur(0)",
+    transition: "all linear 0.25s",
+    opacity: 0,
+    "&:hover": {
+        backgroundColor: "rgba(255,255,255,0.25)",
+        backdropFilter: "blur(5px)",
+        opacity: 1
+    }
+});
+// src/ReactImagePicker.tsx
+import_dropzone.default.autoDiscover = false;
+var getRuleValueAndMessage = function(rule) {
+    if (!rule) return {
+        value: void 0
+    };
+    if ((typeof rule === "undefined" ? "undefined" : _type_of(rule)) === "object" && "value" in rule) {
+        return {
+            value: rule.value,
+            message: rule.message
+        };
+    }
+    return {
+        value: rule
+    };
+};
+var DEFAULT_RULES = {
+    maxSize: {
+        value: 5 * 1024 * 1024,
+        message: "File size must be less than 5MB"
+    },
+    maxFiles: {
+        value: 1,
+        message: "Maximum 1 file allowed"
+    },
+    accepted: {
+        value: "image/*",
+        message: "Only image files are accepted"
+    }
+};
+var validateFile = function(file, rules) {
+    var _getRuleValueAndMessage = getRuleValueAndMessage(rules.maxSize), maxSize = _getRuleValueAndMessage.value, maxSizeMessage = _getRuleValueAndMessage.message;
+    var _getRuleValueAndMessage1 = getRuleValueAndMessage(rules.accepted), accepted = _getRuleValueAndMessage1.value, acceptedMessage = _getRuleValueAndMessage1.message;
+    if (maxSize && file.size > maxSize) {
+        return maxSizeMessage !== null && maxSizeMessage !== void 0 ? maxSizeMessage : "File size must be less than ".concat((maxSize / (1024 * 1024)).toFixed(1), "MB");
+    }
+    if (accepted) {
+        var _file_name_split_pop;
+        var acceptedTypes = Array.isArray(accepted) ? accepted.map(function(type) {
+            return type.toLowerCase();
+        }) : [
+            accepted.toLowerCase()
+        ];
+        var fileExtension = ".".concat((_file_name_split_pop = file.name.split(".").pop()) === null || _file_name_split_pop === void 0 ? void 0 : _file_name_split_pop.toLowerCase());
+        var fileType = file.type.toLowerCase();
+        var isAccepted = acceptedTypes.some(function(type) {
+            if (type === "image/*") {
+                return fileType.startsWith("image/");
+            }
+            return type === fileExtension || type === fileType;
+        });
+        if (!isAccepted) {
+            return acceptedMessage !== null && acceptedMessage !== void 0 ? acceptedMessage : "File type not accepted. Accepted types: ".concat(acceptedTypes.join(", "));
+        }
+    }
+    return null;
+};
+var ReactImagePicker = function(_param) {
+    var _param_images = _param.images, images = _param_images === void 0 ? [] : _param_images, onImagesChanged = _param.onImagesChanged, _param_rules = _param.rules, rules = _param_rules === void 0 ? DEFAULT_RULES : _param_rules, _param_label = _param.label, label = _param_label === void 0 ? "Images" : _param_label, description = _param.description, validate = _param.validate, deleteIcon = _param.deleteIcon, _param_deleteBtnColor = _param.deleteBtnColor, deleteBtnColor = _param_deleteBtnColor === void 0 ? "#f44336" : _param_deleteBtnColor, _param_deleteIconColor = _param.deleteIconColor, deleteIconColor = _param_deleteIconColor === void 0 ? "#ffffff" : _param_deleteIconColor, renderImage = _param.renderImage, _param_hideTitle = _param.hideTitle, hideTitle = _param_hideTitle === void 0 ? false : _param_hideTitle, _param_sectionGap = _param.sectionGap, sectionGap = _param_sectionGap === void 0 ? "15px" : _param_sectionGap, _param_imageGap = _param.imageGap, imageGap = _param_imageGap === void 0 ? "10px" : _param_imageGap, _param_imageGridCount = _param.imageGridCount, imageGridCount = _param_imageGridCount === void 0 ? 3 : _param_imageGridCount, _param_imageBorderRadius = _param.imageBorderRadius, imageBorderRadius = _param_imageBorderRadius === void 0 ? "15px" : _param_imageBorderRadius, style = _param.style, className = _param.className, props = _object_without_properties(_param, [
+        "images",
+        "onImagesChanged",
+        "rules",
+        "label",
+        "description",
+        "validate",
+        "deleteIcon",
+        "deleteBtnColor",
+        "deleteIconColor",
+        "renderImage",
+        "hideTitle",
+        "sectionGap",
+        "imageGap",
+        "imageGridCount",
+        "imageBorderRadius",
+        "style",
+        "className"
+    ]);
+    var _getRuleValueAndMessage = getRuleValueAndMessage(rules.maxFiles), maxFiles = _getRuleValueAndMessage.value, maxFilesMessage = _getRuleValueAndMessage.message;
+    var _getRuleValueAndMessage1 = getRuleValueAndMessage(rules.maxSize), maxSize = _getRuleValueAndMessage1.value, maxSizeMessage = _getRuleValueAndMessage1.message;
+    var _getRuleValueAndMessage2 = getRuleValueAndMessage(rules.accepted), accepted = _getRuleValueAndMessage2.value;
+    var _React_useState = _sliced_to_array(React.useState(images), 2), files = _React_useState[0], setFiles = _React_useState[1];
+    var _React_useState1 = _sliced_to_array(React.useState(null), 2), validationMessage = _React_useState1[0], setValidationMessage = _React_useState1[1];
+    var _React_useState2 = _sliced_to_array(React.useState(false), 2), isValidating = _React_useState2[0], setIsValidating = _React_useState2[1];
+    React.useEffect(function() {
+        if (!validate) return;
+        var validateImages = /*#__PURE__*/ function() {
+            var _ref = _async_to_generator(function() {
+                var result, error;
+                return _ts_generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            setIsValidating(true);
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                3,
+                                4,
+                                5
+                            ]);
+                            return [
+                                4,
+                                validate(files)
+                            ];
+                        case 2:
+                            result = _state.sent();
+                            setValidationMessage(result);
+                            return [
+                                3,
+                                5
+                            ];
+                        case 3:
+                            error = _state.sent();
+                            setValidationMessage(_instanceof(error, Error) ? error.message : "Validation failed");
+                            return [
+                                3,
+                                5
+                            ];
+                        case 4:
+                            setIsValidating(false);
+                            return [
+                                7
+                            ];
+                        case 5:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            });
+            return function validateImages() {
+                return _ref.apply(this, arguments);
+            };
+        }();
+        validateImages();
+    }, [
+        files,
+        validate
+    ]);
+    var _ref = (0, import_react_dropzone.useDropzone)({
+        accept: accepted ? typeof accepted === "string" ? _define_property({}, accepted, []) : accepted.reduce(function(acc, type) {
+            return _object_spread_props(_object_spread({}, acc), _define_property({}, type, []));
+        }, {}) : {
+            "image/*": []
+        },
+        minSize: 0,
+        maxSize: maxSize,
+        maxFiles: maxFiles,
+        multiple: maxFiles === 1 ? false : true,
+        onDropRejected: function onDropRejected(fileRejections, event) {
+            var errors = fileRejections.map(function(rejection) {
+                var file = rejection.file;
+                var error = rejection.errors[0];
+                if (error.code === "file-too-large") {
+                    return maxSizeMessage !== null && maxSizeMessage !== void 0 ? maxSizeMessage : "".concat(file.name, " is too large. Maximum size is ").concat((maxSize / (1024 * 1024)).toFixed(1), "MB");
+                }
+                if (error.code === "file-invalid-type") {
+                    return "".concat(file.name, " has an invalid type");
+                }
+                if (error.code === "too-many-files") {
+                    return maxFilesMessage !== null && maxFilesMessage !== void 0 ? maxFilesMessage : "Maximum ".concat(maxFiles, " file").concat(maxFiles === 1 ? "" : "s", " allowed");
+                }
+                return error.message;
+            });
+            alert(errors.join("\n"));
+        },
+        onDrop: function(acceptedFiles) {
+            var validationErrors = acceptedFiles.map(function(file) {
+                return validateFile(file, rules);
+            }).filter(function(error) {
+                return error !== null;
+            });
+            if (validationErrors.length > 0) {
+                alert(validationErrors.join("\n"));
+                return;
+            }
+            var newList = _to_consumable_array(files).concat(_to_consumable_array(acceptedFiles.map(function(file) {
+                return Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                });
+            }).filter(function(file) {
+                return files.filter(function(_file) {
+                    if (typeof _file === "string") return false;
+                    return _file.name === file.name;
+                }).length === 0;
+            })));
+            setFiles(newList);
+            if (onImagesChanged) {
+                onImagesChanged(newList);
+            }
+        }
+    }), getRootProps = _ref.getRootProps, getInputProps = _ref.getInputProps;
+    React.useEffect(function() {
+        var processedFiles = images.map(function(file) {
+            if (_instanceof(file, File)) {
+                return Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                });
+            }
+            return file;
+        });
+        setFiles(processedFiles);
+    }, [
+        images
+    ]);
+    React.useEffect(function() {
+        return function() {
+            files.forEach(function(file) {
+                return URL.revokeObjectURL(file.preview);
+            });
+        };
+    }, [
+        files
+    ]);
+    var reachedLimit = maxFiles ? files.length >= maxFiles : false;
+    var gridTemplateColumns = "repeat(".concat(imageGridCount, ", 1fr)");
+    var size = 115;
+    if (maxFiles === 1) {
+        gridTemplateColumns = "1fr";
+        size = 200;
+    }
+    if (maxFiles === 2) {
+        gridTemplateColumns = "1fr 1fr";
+        size = 175;
+    }
+    var _ref1;
+    return /* @__PURE__ */ React.createElement(Container, {
+        className: className,
+        style: style
+    }, /* @__PURE__ */ React.createElement(DropzoneContainer, _object_spread_props(_object_spread({}, !reachedLimit ? getRootProps({
+        className: "dropzone"
+    }) : {}), {
+        isDisabled: reachedLimit
+    }), /* @__PURE__ */ React.createElement("input", _object_spread({}, getInputProps())), !hideTitle && /* @__PURE__ */ React.createElement(Title, null, label), /* @__PURE__ */ React.createElement(Description, {
+        hasError: !!validationMessage
+    }, isValidating ? "Validating..." : (_ref1 = validationMessage !== null && validationMessage !== void 0 ? validationMessage : description) !== null && _ref1 !== void 0 ? _ref1 : !reachedLimit ? "Vous pouvez ajouter les images en cliquant ici." : maxFilesMessage !== null && maxFilesMessage !== void 0 ? maxFilesMessage : "Vous avez ajout\xe9 le maximum d'Images possible (".concat(maxFiles, ")")), /* @__PURE__ */ React.createElement(ImageGrid, {
+        gridColumns: "value",
+        style: {
+            "--grid-columns-value": imageGridCount,
+            "--image-gap-value": imageGap,
+            "--image-border-radius-value": imageBorderRadius
+        }
+    }, files.map(function(file) {
+        var fileIsString = typeof file === "string";
+        var _file = fileIsString ? {
+            name: file,
+            preview: file
+        } : file;
+        var src = typeof _file === "string" ? _file : _file.preview;
+        var imgProps = {
+            src: src,
+            width: size,
+            height: size,
+            style: _object_spread({
+                objectFit: "cover"
+            }, maxFiles === 1 ? {} : {
+                width: "100%",
+                height: "100%"
+            }),
+            alt: typeof _file === "string" ? _file : _file.name
+        };
+        return /* @__PURE__ */ React.createElement(ImageContainer, {
+            key: src,
+            singleImage: maxFiles === 1
+        }, renderImage ? renderImage(imgProps) : /* @__PURE__ */ React.createElement("img", _object_spread({}, imgProps)), /* @__PURE__ */ React.createElement(Overlay, null, /* @__PURE__ */ React.createElement(DeleteButton, {
+            color: "default",
+            onClick: function(e) {
+                var _files = _to_consumable_array(files.filter(function(f) {
+                    var isString = typeof f === "string";
+                    var name = isString ? f : f.name;
+                    return name !== _file.name;
+                }));
+                setFiles(_files);
+                onImagesChanged(_files);
+                e.stopPropagation();
+            }
+        }, deleteIcon !== null && deleteIcon !== void 0 ? deleteIcon : /* @__PURE__ */ React.createElement(DeleteIcon, null))));
+    }))));
+};
+var DeleteIcon = function() {
+    return /* @__PURE__ */ React.createElement("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "16",
+        height: "16",
+        fill: "currentColor",
+        className: "bi bi-trash",
+        viewBox: "0 0 16 16"
+    }, /* @__PURE__ */ React.createElement("path", {
+        d: "M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+    }), /* @__PURE__ */ React.createElement("path", {
+        d: "M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+    }));
+};
+// src/uploadImage.ts
+var import_storage = require("firebase/storage");
+var uploadImage = /*#__PURE__*/ function() {
+    var _ref = _async_to_generator(function(param) {
+        var file, storage, _param_isProd, isProd, _param_path, path, _path, fullPath, storageRef, uploadTask, url;
+        return _ts_generator(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    file = param.file, storage = param.storage, _param_isProd = param.isProd, isProd = _param_isProd === void 0 ? false : _param_isProd, _param_path = param.path, path = _param_path === void 0 ? "Images" : _param_path;
+                    if (typeof file === "string") return [
+                        2,
+                        file
+                    ];
+                    _path = path.endsWith("/") ? path.slice(0, -1) : path;
+                    if (!_path.trim().length) _path = "Images";
+                    fullPath = "".concat(isProd ? "" : "DEV/").concat(_path, "/").concat(file.name);
+                    storageRef = (0, import_storage.ref)(storage, fullPath);
+                    uploadTask = (0, import_storage.uploadBytesResumable)(storageRef, file);
+                    return [
+                        4,
+                        uploadTask
+                    ];
+                case 1:
+                    _state.sent();
+                    return [
+                        4,
+                        (0, import_storage.getDownloadURL)(uploadTask.snapshot.ref)
+                    ];
+                case 2:
+                    url = _state.sent();
+                    return [
+                        2,
+                        url
+                    ];
+            }
+        });
+    });
+    return function uploadImage(_) {
+        return _ref.apply(this, arguments);
+    };
+}();
+// src/index.tsx
+var index_default = ReactImagePicker;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+    ReactImagePicker: ReactImagePicker,
+    uploadImage: uploadImage
+});
+//# sourceMappingURL=index.js.map

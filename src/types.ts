@@ -1,4 +1,3 @@
-import type { Stack } from "@mui/material";
 import type { FirebaseStorage } from "firebase/storage";
 
 /**
@@ -29,19 +28,71 @@ export type UploadImageArgs = {
 export type UploadImageType = (args: UploadImageArgs) => Promise<string>;
 
 /**
+ * Rule with optional custom message
+ */
+export type RuleWithMessage<T> =
+  | T
+  | {
+      value: T;
+      message: string;
+    };
+
+export type ImageType =
+  | "image/*"
+  | ".jpeg"
+  | ".png"
+  | ".gif"
+  | ".webp"
+  | ".jpg";
+
+/**
+ * Validation rules for file uploads
+ */
+export type FileValidationRules = {
+  /**
+   * Maximum file size in bytes
+   */
+  maxSize?: RuleWithMessage<number>;
+  /**
+   * Maximum number of files allowed
+   */
+  maxFiles?: RuleWithMessage<number>;
+  /**
+   * Accepted file types. Can be:
+   * - Array of extensions (e.g., ['.jpg', '.png'])
+   * - MIME type pattern (e.g., 'image/*')
+   */
+  accepted?: RuleWithMessage<ImageType[] | ImageType>;
+};
+
+/**
  * The props that will be passed to the `ReactImagePicker` component
  */
-export type ReactImagePickerProps = React.ComponentProps<typeof Stack> & {
+export type ReactImagePickerProps = {
+  // Primary props that should be set first
   /**
    * The function that will be called when the user selects new images
+   * @required
    */
-  onImageChange: (images: (File | string)[]) => void;
+  onImagesChanged: (images: (File | string)[]) => void;
+  /**
+   * Validation rules for file uploads
+   */
+  rules?: FileValidationRules;
   /**
    * The initial images to show
+   * @default []
    */
-  initImages?: string[];
+  images?: (File | string)[];
+  /**
+   * The component to render for each local image
+   */
+  renderImage?: (props: renderImageType) => React.ReactNode;
+
+  // Display configuration props
   /**
    * The label to display above the dropzone
+   * @default "Images"
    */
   label?: string;
   /**
@@ -49,55 +100,70 @@ export type ReactImagePickerProps = React.ComponentProps<typeof Stack> & {
    */
   description?: string;
   /**
-   * The maximum number of files that can be uploaded
+   * Validation function that takes current images and returns either null (valid) or an error message
+   * Can be async to perform online validation
    */
-  maxFiles?: number;
+  validate?: (
+    images: (File | string)[]
+  ) => Promise<string | null> | string | null;
+  /**
+   * Whether or not to hide the title
+   * @default false
+   */
+  hideTitle?: boolean;
+
+  // Delete button customization
   /**
    * The icon to display on the delete button
    */
   deleteIcon?: React.ReactNode;
   /**
    * The background color of the delete button
+   * @default "#f44336"
    */
   deleteBtnColor?: string;
   /**
    * The color of the delete icon
+   * @default "#ffffff"
    */
   deleteIconColor?: string;
-  /**
-   * The component to render for each local image
-   */
-  localImage?: (props: LocalImageType) => React.ReactNode;
-  /**
-   * Whether or not to hide the title
-   */
-  hideTitle?: boolean;
 
+  // Layout customization
   /**
    * Gap between sections (ex: title, description, images, etc...) in pixels
+   * @default "15px"
    */
   sectionGap?: string;
-
   /**
    * Gap between images in pixels
+   * @default "10px"
    */
   imageGap?: string;
-
   /**
    * The number of images to display in the grid
+   * @default 3
    */
   imageGridCount?: number;
-
   /**
    * The border radius of the images
+   * @default "15px"
    */
   imageBorderRadius?: string;
+
+  /**
+   * Additional CSS styles for the container
+   */
+  style?: React.CSSProperties;
+  /**
+   * Additional CSS class name for the container
+   */
+  className?: string;
 };
 
 /**
- * The props that will be passed to the `localImage` component
+ * The props that will be passed to the `renderImage` component
  */
-export type LocalImageType = {
+export type renderImageType = {
   /**
    * The URL of the image
    */
@@ -113,7 +179,7 @@ export type LocalImageType = {
   /**
    * The style of the image
    */
-  style: any;
+  style: React.CSSProperties;
   /**
    * The alt text of the image
    */

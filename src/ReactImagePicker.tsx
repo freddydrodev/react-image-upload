@@ -1,24 +1,114 @@
 import * as React from "react";
 import Dropzone from "dropzone";
-import { Fab, Stack, Typography } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import { LocalImageType, ReactImagePickerProps } from "./types";
+import {
+  renderImageType,
+  ReactImagePickerProps,
+  FileValidationRules,
+  RuleWithMessage,
+} from "./types";
+import { styled } from "@stitches/react";
+import {
+  Container,
+  DropzoneContainer,
+  Title,
+  Description,
+  ImageGrid,
+  ImageContainer,
+  DeleteButton,
+  Overlay,
+} from "./styles";
 
 Dropzone.autoDiscover = false;
+
+/**
+ * Helper function to get rule value and message
+ */
+const getRuleValueAndMessage = <T,>(
+  rule: RuleWithMessage<T> | undefined
+): { value: T | undefined; message?: string } => {
+  if (!rule) return { value: undefined };
+  if (typeof rule === "object" && "value" in rule) {
+    return { value: rule.value, message: rule.message };
+  }
+  return { value: rule };
+};
+
+/**
+ * Default validation rules
+ */
+const DEFAULT_RULES: FileValidationRules = {
+  maxSize: {
+    value: 5 * 1024 * 1024,
+    message: "File size must be less than 5MB",
+  },
+  maxFiles: { value: 1, message: "Maximum 1 file allowed" },
+  accepted: { value: "image/*", message: "Only image files are accepted" },
+};
+
+/**
+ * Validates a file against the provided rules
+ */
+const validateFile = (
+  file: File,
+  rules: FileValidationRules
+): string | null => {
+  const { value: maxSize, message: maxSizeMessage } = getRuleValueAndMessage(
+    rules.maxSize
+  );
+  const { value: accepted, message: acceptedMessage } = getRuleValueAndMessage(
+    rules.accepted
+  );
+
+  // Check file size
+  if (maxSize && file.size > maxSize) {
+    return (
+      maxSizeMessage ??
+      `File size must be less than ${(maxSize / (1024 * 1024)).toFixed(1)}MB`
+    );
+  }
+
+  // Check file type
+  if (accepted) {
+    const acceptedTypes = Array.isArray(accepted)
+      ? accepted.map((type) => type.toLowerCase())
+      : [accepted.toLowerCase()];
+
+    const fileExtension = `.${file.name.split(".").pop()?.toLowerCase()}`;
+    const fileType = file.type.toLowerCase();
+
+    const isAccepted = acceptedTypes.some((type) => {
+      if (type === "image/*") {
+        return fileType.startsWith("image/");
+      }
+      return type === fileExtension || type === fileType;
+    });
+
+    if (!isAccepted) {
+      return (
+        acceptedMessage ??
+        `File type not accepted. Accepted types: ${acceptedTypes.join(", ")}`
+      );
+    }
+  }
+
+  return null;
+};
 
 /**
  * A React component for selecting and displaying images using a drag-and-drop interface.
  *
  * @param {Object} props - The component props.
- * @param {(File | string)[]} [props.initImage] - Initial images to display.
- * @param {(images: (File | string)[]) => void} props.onImageChange - Callback triggered when the image list changes.
- * @param {number} [props.maxFiles=1] - Maximum number of files that can be selected.
+ * @param {(File | string)[]} [props.images] - Initial images to display.
+ * @param {(images: (File | string)[]) => void} props.onImagesChanged - Callback triggered when the image list changes.
+ * @param {FileValidationRules} [props.rules] - Validation rules for the images.
  * @param {string} [props.label] - The label displayed for the image picker.
  * @param {string} [props.description] - Additional text to describe the image picker.
+ * @param {boolean} [props.validate] - Flag to indicate if the image picker is in a valid state.
  * @param {React.ReactNode} [props.deleteIcon] - Custom delete icon to be used.
  * @param {string} [props.deleteBtnColor="#f44336"] - Color of the delete button.
  * @param {string} [props.deleteIconColor="#ffffff"] - Color of the delete icon.
- * @param {(props: LocalImageType) => React.ReactNode} [props.localImage] - Custom component to render images.
+ * @param {(props: renderImageType) => React.ReactNode} [props.renderImage] - Custom component to render images.
  * @param {boolean} [props.hideTitle=false] - Flag to hide the title.
  * @param {string} [props.sectionGap="15px"] - Gap between sections (ex: title, description, images, etc...) in pixels.
  * @param {string} [props.imageGap="10px"] - Gap between images in pixels.
@@ -27,42 +117,117 @@ Dropzone.autoDiscover = false;
  * @returns {JSX.Element} The ReactImagePicker component.
  */
 export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
-  initImages = [],
-  onImageChange,
-  maxFiles = 1,
+  images = [],
+  onImagesChanged,
+  rules = DEFAULT_RULES,
   label = "Images",
   description,
+  validate,
   deleteIcon,
   deleteBtnColor = "#f44336",
   deleteIconColor = "#ffffff",
-  localImage,
+  renderImage,
   hideTitle = false,
   sectionGap = "15px",
   imageGap = "10px",
   imageGridCount = 3,
   imageBorderRadius = "15px",
-  sx,
+  style,
+  className,
   ...props
 }) => {
+  const { value: maxFiles, message: maxFilesMessage } = getRuleValueAndMessage(
+    rules.maxFiles
+  );
+  const { value: maxSize, message: maxSizeMessage } = getRuleValueAndMessage(
+    rules.maxSize
+  );
+  const { value: accepted } = getRuleValueAndMessage(rules.accepted);
+
   /**
    * IMAGES SELECTED BY THE USER
    */
-  const [files, setFiles] = React.useState<(File | string)[]>(initImages);
+  const [files, setFiles] = React.useState<(File | string)[]>(images);
+  const [validationMessage, setValidationMessage] = React.useState<
+    string | null
+  >(null);
+  const [isValidating, setIsValidating] = React.useState(false);
+
+  /**
+   * Handle validation
+   */
+  React.useEffect(() => {
+    if (!validate) return;
+
+    const validateImages = async () => {
+      setIsValidating(true);
+      try {
+        const result = await validate(files);
+        setValidationMessage(result);
+      } catch (error) {
+        setValidationMessage(
+          error instanceof Error ? error.message : "Validation failed"
+        );
+      } finally {
+        setIsValidating(false);
+      }
+    };
+
+    validateImages();
+  }, [files, validate]);
+
   const { getRootProps, getInputProps } = useDropzone({
-    accept: { "image/*": [] },
-    minSize: 1024,
+    accept: accepted
+      ? typeof accepted === "string"
+        ? { [accepted]: [] }
+        : accepted.reduce((acc, type) => ({ ...acc, [type]: [] }), {})
+      : { "image/*": [] },
+    minSize: 0,
+    maxSize: maxSize,
     maxFiles: maxFiles,
     multiple: maxFiles === 1 ? false : true,
     onDropRejected(fileRejections, event) {
-      const multipleText =
-        fileRejections.length > 1
-          ? "Fichiers ont été réfusés"
-          : "Fichier a été réfusé";
+      const errors = fileRejections.map((rejection) => {
+        const file = rejection.file;
+        const error = rejection.errors[0];
 
-      alert(`${fileRejections.length} ${multipleText}.`);
+        if (error.code === "file-too-large") {
+          return (
+            maxSizeMessage ??
+            `${file.name} is too large. Maximum size is ${(
+              maxSize! /
+              (1024 * 1024)
+            ).toFixed(1)}MB`
+          );
+        }
+
+        if (error.code === "file-invalid-type") {
+          return `${file.name} has an invalid type`;
+        }
+
+        if (error.code === "too-many-files") {
+          return (
+            maxFilesMessage ??
+            `Maximum ${maxFiles} file${maxFiles === 1 ? "" : "s"} allowed`
+          );
+        }
+
+        return error.message;
+      });
+
+      alert(errors.join("\n"));
     },
-
     onDrop: (acceptedFiles) => {
+      // Validate each file against rules
+      const validationErrors = acceptedFiles
+        .map((file) => validateFile(file, rules))
+        .filter((error): error is string => error !== null);
+
+      if (validationErrors.length > 0) {
+        alert(validationErrors.join("\n"));
+        return;
+      }
+
       const newList = [
         ...files,
         ...acceptedFiles
@@ -75,11 +240,11 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
             (file) =>
               files.filter((_file: File | string) => {
                 if (typeof _file === "string") return false;
-
                 return _file.name === file.name;
               }).length === 0
           ),
       ];
+
       /**
        * CHANGE THE LOCAL VERSION OF THE IMAGES
        */
@@ -88,11 +253,26 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
       /**
        * CHANGE THE PARENT VERSION TOO
        */
-      if (onImageChange) {
-        onImageChange(newList);
+      if (onImagesChanged) {
+        onImagesChanged(newList);
       }
     },
   });
+
+  /**
+   * Handle initial File objects by creating preview URLs
+   */
+  React.useEffect(() => {
+    const processedFiles = images.map((file) => {
+      if (file instanceof File) {
+        return Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+      }
+      return file;
+    });
+    setFiles(processedFiles);
+  }, [images]);
 
   /**
    * USED FOR PERFORMANCE
@@ -105,7 +285,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
     [files]
   );
 
-  const reachedLimit = files.length >= maxFiles;
+  const reachedLimit = maxFiles ? files.length >= maxFiles : false;
 
   let gridTemplateColumns = `repeat(${imageGridCount}, 1fr)`;
   let size = 115;
@@ -121,52 +301,32 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
   }
 
   return (
-    <Stack
-      {...props}
-      sx={{
-        padding: "20px",
-        boxSizing: "border-box",
-        aspectRatio: 1,
-        width: 400,
-        ...sx,
-        "& .dropzone": { border: 0, p: 0 },
-        overflow: "visible",
-      }}
-    >
-      <Stack
+    <Container className={className} style={style}>
+      <DropzoneContainer
         {...(!reachedLimit ? getRootProps({ className: "dropzone" }) : {})}
-        spacing={sectionGap}
-        sx={{ cursor: reachedLimit ? "auto" : "pointer" }}
+        isDisabled={reachedLimit}
       >
         <input {...getInputProps()} />
-        {!hideTitle && (
-          <Typography
-            fontWeight={700}
-            fontSize="2rem"
-            lineHeight="1em"
-            textAlign="center"
-          >
-            {label}
-          </Typography>
-        )}
-        <Typography
-          fontWeight={500}
-          fontSize="1rem"
-          lineHeight="1.3em"
-          textAlign="center"
-        >
-          {description ??
-            (!reachedLimit
-              ? "Vous pouvez ajouter les images en cliquant ici."
-              : "Vous avez ajouté le maximum d'Images possible")}
-        </Typography>
-        <Stack
-          display="grid"
-          sx={{
-            gridTemplateColumns,
-            gap: imageGap,
-            maxHeight: 380,
-          }}
+        {!hideTitle && <Title>{label}</Title>}
+        <Description hasError={!!validationMessage}>
+          {isValidating
+            ? "Validating..."
+            : validationMessage ??
+              description ??
+              (!reachedLimit
+                ? "Vous pouvez ajouter les images en cliquant ici."
+                : maxFilesMessage ??
+                  `Vous avez ajouté le maximum d'Images possible (${maxFiles})`)}
+        </Description>
+        <ImageGrid
+          gridColumns="value"
+          style={
+            {
+              "--grid-columns-value": imageGridCount,
+              "--image-gap-value": imageGap,
+              "--image-border-radius-value": imageBorderRadius,
+            } as React.CSSProperties
+          }
         >
           {files.map((file) => {
             const fileIsString = typeof file === "string";
@@ -178,7 +338,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
             const src =
               typeof _file === "string" ? _file : (_file as any).preview;
 
-            const imgProps: LocalImageType = {
+            const imgProps: renderImageType = {
               src: src,
               width: size,
               height: size,
@@ -190,54 +350,11 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
             };
 
             return (
-              <Stack
-                alignItems="center"
-                justifyContent="center"
-                display="flex"
-                sx={{
-                  width: "100%",
-                  aspectRatio: maxFiles === 1 ? undefined : 1,
-                  borderRadius: imageBorderRadius,
-                  overflow: "hidden",
-                  position: "relative",
-                  margin: maxFiles === 1 ? "auto" : 0,
-                  // border: "1px solid #ececf0",
-                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                }}
-                key={src}
-              >
-                {localImage ? localImage(imgProps) : <img {...imgProps} />}
-                <Stack
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: imageBorderRadius,
-                    zIndex: 10,
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bgcolor: "rgba(255,255,255,0)",
-                    backdropFilter: "blur(0)",
-                    transition: "all linear 0.25s",
-                    opacity: 0,
-
-                    "&:hover": {
-                      bgcolor: "rgba(255,255,255,0.25)",
-                      backdropFilter: "blur(5px)",
-                      opacity: 1,
-                    },
-                  }}
-                >
-                  <Fab
-                    size="small"
-                    color="error"
-                    sx={{
-                      boxShadow: "none",
-                      bgcolor: deleteBtnColor,
-                      color: deleteIconColor,
-                    }}
+              <ImageContainer key={src} singleImage={maxFiles === 1}>
+                {renderImage ? renderImage(imgProps) : <img {...imgProps} />}
+                <Overlay>
+                  <DeleteButton
+                    color="default"
                     onClick={(e) => {
                       const _files = [
                         ...files.filter((f) => {
@@ -252,27 +369,20 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
 
                       setFiles(_files);
 
-                      onImageChange(_files);
+                      onImagesChanged(_files);
 
                       e.stopPropagation();
                     }}
                   >
                     {deleteIcon ?? <DeleteIcon />}
-                  </Fab>
-                </Stack>
-              </Stack>
+                  </DeleteButton>
+                </Overlay>
+              </ImageContainer>
             );
           })}
-        </Stack>
-        <Typography variant="caption" textAlign="center">
-          {/* Chacune de vos images doit faire au plus 1Mb. <br /> Il vous faut
-          aussi noter que seul les images de format (.JPEG, .JPG, .PNG) sont
-          prise en compte.
-          <br /> */}
-          Le nombre maximum d&apos;image est {maxFiles}
-        </Typography>
-      </Stack>
-    </Stack>
+        </ImageGrid>
+      </DropzoneContainer>
+    </Container>
   );
 };
 

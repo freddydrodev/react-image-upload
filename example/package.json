@@ -10,16 +10,25 @@
   },
   "dependencies": {
     "@freddydrodev/react-image-upload": "link:..",
-    "next": "14.2.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "next": "15.3.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@types/node": "^20.17.9",
-    "@types/react": "^18.3.13",
-    "@types/react-dom": "^18.3.1",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.7",
-    "typescript": "^5.7.2"
+    "@types/node": "^22.14.1",
+    "@types/react": "19.1.1",
+    "@types/react-dom": "19.1.2",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "15.3.0",
+    "typescript": "^5.8.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.1.1",
+      "@types/react-dom": "19.1.2"
+    },
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   }
 }

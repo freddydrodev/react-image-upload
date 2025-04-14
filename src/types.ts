@@ -43,7 +43,11 @@ export type ImageType =
   | ".png"
   | ".gif"
   | ".webp"
-  | ".jpg";
+  | ".jpg"
+  | "image/jpeg"
+  | "image/png"
+  | "image/gif"
+  | "image/webp";
 
 /**
  * Validation rules for file uploads

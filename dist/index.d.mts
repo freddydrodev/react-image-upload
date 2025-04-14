@@ -33,7 +33,7 @@ type RuleWithMessage<T> = T | {
     value: T;
     message: string;
 };
-type ImageType = "image/*" | ".jpeg" | ".png" | ".gif" | ".webp" | ".jpg";
+type ImageType = "image/*" | ".jpeg" | ".png" | ".gif" | ".webp" | ".jpg" | "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 /**
  * Validation rules for file uploads
  */

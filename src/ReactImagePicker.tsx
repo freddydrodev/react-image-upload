@@ -1,6 +1,7 @@
 import * as React from "react";
 import Dropzone from "dropzone";
 import { useDropzone } from "react-dropzone";
+import { useMount } from "react-use";
 import {
   renderImageType,
   ReactImagePickerProps,
@@ -150,10 +151,91 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
    * IMAGES SELECTED BY THE USER
    */
   const [files, setFiles] = React.useState<(File | string)[]>(images);
+
+  const [previewUrls, setPreviewUrls] = React.useState<string[]>([]);
+
   const [validationMessage, setValidationMessage] = React.useState<
     string | null
   >(null);
+
   const [isValidating, setIsValidating] = React.useState(false);
+
+  /**
+   * Generate preview URLs for files
+   */
+  const generatePreviewUrls = React.useCallback(() => {
+    const urls = files.map((file) => {
+      if (typeof file === "string") {
+        return file;
+      } else {
+        // Check if the file has a valid MIME type
+        if (file.type && file.type.startsWith("image/")) {
+          return URL.createObjectURL(file);
+        } else {
+          // If the file doesn't have a valid MIME type, try to determine it from the extension
+          const extension = file.name.split(".").pop()?.toLowerCase();
+          let mimeType = "image/jpeg"; // Default to jpeg
+
+          if (extension) {
+            switch (extension) {
+              case "jpg":
+              case "jpeg":
+                mimeType = "image/jpeg";
+                break;
+              case "png":
+                mimeType = "image/png";
+                break;
+              case "gif":
+                mimeType = "image/gif";
+                break;
+              case "webp":
+                mimeType = "image/webp";
+                break;
+              case "svg":
+                mimeType = "image/svg+xml";
+                break;
+              default:
+                mimeType = "image/jpeg"; // Default fallback
+            }
+          }
+
+          // Create a new File object with the correct MIME type
+          const fileWithMimeType = new File([file], file.name, {
+            type: mimeType,
+          });
+          return URL.createObjectURL(fileWithMimeType);
+        }
+      }
+    });
+
+    console.log("PREVIEW URLS =>", urls);
+    setPreviewUrls(urls);
+  }, [files]);
+
+  /**
+   * Generate preview URLs on mount and when files change
+   */
+  useMount(() => {
+    generatePreviewUrls();
+  });
+
+  React.useEffect(() => {
+    generatePreviewUrls();
+  }, [files, generatePreviewUrls]);
+
+  /**
+   * Clean up preview URLs when component unmounts or files change
+   */
+  React.useEffect(() => {
+    return () => {
+      // Revoke all object URLs to prevent memory leaks
+      previewUrls.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [previewUrls]);
 
   /**
    * Handle validation
@@ -182,7 +264,31 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
     accept: accepted
       ? typeof accepted === "string"
         ? { [accepted]: [] }
-        : accepted.reduce((acc, type) => ({ ...acc, [type]: [] }), {})
+        : accepted.reduce((acc, type) => {
+            // Convert file extensions to MIME types
+            let mimeType: string = type;
+            if (type.startsWith(".")) {
+              switch (type.toLowerCase()) {
+                case ".jpg":
+                case ".jpeg":
+                  mimeType = "image/jpeg";
+                  break;
+                case ".png":
+                  mimeType = "image/png";
+                  break;
+                case ".gif":
+                  mimeType = "image/gif";
+                  break;
+                case ".webp":
+                  mimeType = "image/webp";
+                  break;
+                default:
+                  // Keep the original type if it's not recognized
+                  mimeType = type;
+              }
+            }
+            return { ...acc, [mimeType]: [] };
+          }, {})
       : { "image/*": [] },
     minSize: 0,
     maxSize: maxSize,
@@ -249,21 +355,53 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
         return;
       }
 
+      // Process files to ensure they have proper MIME types
+      const processedFiles = acceptedFiles.map((file) => {
+        // If the file already has a valid MIME type, use it as is
+        if (file.type && file.type.startsWith("image/")) {
+          return file;
+        }
+
+        // Otherwise, determine the MIME type from the extension
+        const extension = file.name.split(".").pop()?.toLowerCase();
+        let mimeType = "image/jpeg"; // Default to jpeg
+
+        if (extension) {
+          switch (extension) {
+            case "jpg":
+            case "jpeg":
+              mimeType = "image/jpeg";
+              break;
+            case "png":
+              mimeType = "image/png";
+              break;
+            case "gif":
+              mimeType = "image/gif";
+              break;
+            case "webp":
+              mimeType = "image/webp";
+              break;
+            case "svg":
+              mimeType = "image/svg+xml";
+              break;
+            default:
+              mimeType = "image/jpeg"; // Default fallback
+          }
+        }
+
+        // Create a new File object with the correct MIME type
+        return new File([file], file.name, { type: mimeType });
+      });
+
       const newList = [
         ...files,
-        ...acceptedFiles
-          .map((file) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-            })
-          )
-          .filter(
-            (file) =>
-              files.filter((_file: File | string) => {
-                if (typeof _file === "string") return false;
-                return _file.name === file.name;
-              }).length === 0
-          ),
+        ...processedFiles.filter(
+          (file) =>
+            files.filter((_file: File | string) => {
+              if (typeof _file === "string") return false;
+              return _file.name === file.name;
+            }).length === 0
+        ),
       ];
 
       /**
@@ -281,34 +419,17 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
   });
 
   /**
-   * Handle initial File objects by creating preview URLs
+   * Handle initial File objects
    */
   React.useEffect(() => {
-    const processedFiles = images.map((file) => {
-      if (file instanceof File) {
-        return Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        });
-      }
-      return file;
-    });
-    setFiles(processedFiles);
+    setFiles(images);
   }, [images]);
-
-  /**
-   * USED FOR PERFORMANCE
-   */
-  React.useEffect(
-    () => () => {
-      // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach((file) => URL.revokeObjectURL((file as any).preview));
-    },
-    [files]
-  );
 
   const reachedLimit = maxFiles ? files.length >= maxFiles : false;
 
   let size = 115;
+
+  console.log(files);
 
   return (
     <Container className={className} style={style}>
@@ -337,29 +458,29 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
               } as React.CSSProperties
             }
           >
-            {files.map((file) => {
+            {files.map((file, index) => {
               const fileIsString = typeof file === "string";
-
-              const _file = fileIsString
-                ? { name: file as string, preview: file as string }
-                : (file as File);
-
-              const src =
-                typeof _file === "string" ? _file : (_file as any).preview;
+              const previewUrl =
+                previewUrls[index] || (fileIsString ? file : "");
 
               const imgProps: renderImageType = {
-                src: src,
+                src:
+                  previewUrl ??
+                  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNhYWEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBQcmV2aWV3PC90ZXh0Pjwvc3ZnPg==",
                 width: size,
                 height: size,
                 style: {
                   objectFit: "cover",
                   ...(maxFiles === 1 ? {} : { width: "100%", height: "100%" }),
                 },
-                alt: typeof _file === "string" ? _file : (_file as any).name,
+                alt: fileIsString ? file : file.name,
               };
 
               return (
-                <ImageContainer key={src} singleImage={maxFiles === 1}>
+                <ImageContainer
+                  key={index.toString()}
+                  singleImage={maxFiles === 1}
+                >
                   {renderImage ? renderImage(imgProps) : <img {...imgProps} />}
                   <Overlay>
                     <DeleteButton
@@ -372,7 +493,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
                               ? (f as string)
                               : (f as File).name;
 
-                            return name !== _file.name;
+                            return name !== (fileIsString ? file : file.name);
                           }),
                         ];
 
@@ -392,7 +513,7 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
           </ImageGrid>
         )}
 
-        <Message hasError={!!validationMessage || reachedLimit || hasError}>
+        <Message hasError={!!validationMessage || hasError}>
           {hasError
             ? message ?? "An error occurred"
             : isValidating

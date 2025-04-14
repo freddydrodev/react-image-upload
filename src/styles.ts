@@ -1,14 +1,9 @@
 import { styled } from "@stitches/react";
 
 export const Container = styled("div", {
-  // padding: "20px",
-  // boxSizing: "border-box",
-  // width: 400,
   display: "flex",
   flexDirection: "column",
   border: "1px dashed #e0e0e0",
-  // borderRadius: "15px",
-  // backgroundColor: "rgba(0, 0, 0, 0.015)",
 });
 
 export const DropzoneContainer = styled("div", {

@@ -347,12 +347,10 @@ module.exports = __toCommonJS(index_exports);
 var React = __toESM(require("react"));
 var import_dropzone = __toESM(require("dropzone"));
 var import_react_dropzone = require("react-dropzone");
+var import_react_use = require("react-use");
 // src/styles.ts
 var import_react = require("@stitches/react");
 var Container = (0, import_react.styled)("div", {
-    // padding: "20px",
-    // boxSizing: "border-box",
-    // width: 400,
     display: "flex",
     flexDirection: "column",
     border: "1px dashed #e0e0e0"
@@ -569,8 +567,76 @@ var ReactImagePicker = function(_param) {
     var _getRuleValueAndMessage1 = getRuleValueAndMessage(rules.maxSize), maxSize = _getRuleValueAndMessage1.value, maxSizeMessage = _getRuleValueAndMessage1.message;
     var _getRuleValueAndMessage2 = getRuleValueAndMessage(rules.accepted), accepted = _getRuleValueAndMessage2.value;
     var _React_useState = _sliced_to_array(React.useState(images), 2), files = _React_useState[0], setFiles = _React_useState[1];
-    var _React_useState1 = _sliced_to_array(React.useState(null), 2), validationMessage = _React_useState1[0], setValidationMessage = _React_useState1[1];
-    var _React_useState2 = _sliced_to_array(React.useState(false), 2), isValidating = _React_useState2[0], setIsValidating = _React_useState2[1];
+    var _React_useState1 = _sliced_to_array(React.useState([]), 2), previewUrls = _React_useState1[0], setPreviewUrls = _React_useState1[1];
+    var _React_useState2 = _sliced_to_array(React.useState(null), 2), validationMessage = _React_useState2[0], setValidationMessage = _React_useState2[1];
+    var _React_useState3 = _sliced_to_array(React.useState(false), 2), isValidating = _React_useState3[0], setIsValidating = _React_useState3[1];
+    var generatePreviewUrls = React.useCallback(function() {
+        var urls = files.map(function(file) {
+            if (typeof file === "string") {
+                return file;
+            } else {
+                if (file.type && file.type.startsWith("image/")) {
+                    return URL.createObjectURL(file);
+                } else {
+                    var _file_name_split_pop;
+                    var extension = (_file_name_split_pop = file.name.split(".").pop()) === null || _file_name_split_pop === void 0 ? void 0 : _file_name_split_pop.toLowerCase();
+                    var mimeType = "image/jpeg";
+                    if (extension) {
+                        switch(extension){
+                            case "jpg":
+                            case "jpeg":
+                                mimeType = "image/jpeg";
+                                break;
+                            case "png":
+                                mimeType = "image/png";
+                                break;
+                            case "gif":
+                                mimeType = "image/gif";
+                                break;
+                            case "webp":
+                                mimeType = "image/webp";
+                                break;
+                            case "svg":
+                                mimeType = "image/svg+xml";
+                                break;
+                            default:
+                                mimeType = "image/jpeg";
+                        }
+                    }
+                    var fileWithMimeType = new File([
+                        file
+                    ], file.name, {
+                        type: mimeType
+                    });
+                    return URL.createObjectURL(fileWithMimeType);
+                }
+            }
+        });
+        console.log("PREVIEW URLS =>", urls);
+        setPreviewUrls(urls);
+    }, [
+        files
+    ]);
+    (0, import_react_use.useMount)(function() {
+        generatePreviewUrls();
+    });
+    React.useEffect(function() {
+        generatePreviewUrls();
+    }, [
+        files,
+        generatePreviewUrls
+    ]);
+    React.useEffect(function() {
+        return function() {
+            previewUrls.forEach(function(url) {
+                if (url.startsWith("blob:")) {
+                    URL.revokeObjectURL(url);
+                }
+            });
+        };
+    }, [
+        previewUrls
+    ]);
     React.useEffect(function() {
         if (!validate) return;
         var validateImages = /*#__PURE__*/ function() {
@@ -629,7 +695,27 @@ var ReactImagePicker = function(_param) {
     ]);
     var _ref = (0, import_react_dropzone.useDropzone)({
         accept: accepted ? typeof accepted === "string" ? _define_property({}, accepted, []) : accepted.reduce(function(acc, type) {
-            return _object_spread_props(_object_spread({}, acc), _define_property({}, type, []));
+            var mimeType = type;
+            if (type.startsWith(".")) {
+                switch(type.toLowerCase()){
+                    case ".jpg":
+                    case ".jpeg":
+                        mimeType = "image/jpeg";
+                        break;
+                    case ".png":
+                        mimeType = "image/png";
+                        break;
+                    case ".gif":
+                        mimeType = "image/gif";
+                        break;
+                    case ".webp":
+                        mimeType = "image/webp";
+                        break;
+                    default:
+                        mimeType = type;
+                }
+            }
+            return _object_spread_props(_object_spread({}, acc), _define_property({}, mimeType, []));
         }, {}) : {
             "image/*": []
         },
@@ -674,11 +760,42 @@ var ReactImagePicker = function(_param) {
                 setValidationMessage(validationErrors.join("\n"));
                 return;
             }
-            var newList = _to_consumable_array(files).concat(_to_consumable_array(acceptedFiles.map(function(file) {
-                return Object.assign(file, {
-                    preview: URL.createObjectURL(file)
+            var processedFiles = acceptedFiles.map(function(file) {
+                var _file_name_split_pop;
+                if (file.type && file.type.startsWith("image/")) {
+                    return file;
+                }
+                var extension = (_file_name_split_pop = file.name.split(".").pop()) === null || _file_name_split_pop === void 0 ? void 0 : _file_name_split_pop.toLowerCase();
+                var mimeType = "image/jpeg";
+                if (extension) {
+                    switch(extension){
+                        case "jpg":
+                        case "jpeg":
+                            mimeType = "image/jpeg";
+                            break;
+                        case "png":
+                            mimeType = "image/png";
+                            break;
+                        case "gif":
+                            mimeType = "image/gif";
+                            break;
+                        case "webp":
+                            mimeType = "image/webp";
+                            break;
+                        case "svg":
+                            mimeType = "image/svg+xml";
+                            break;
+                        default:
+                            mimeType = "image/jpeg";
+                    }
+                }
+                return new File([
+                    file
+                ], file.name, {
+                    type: mimeType
                 });
-            }).filter(function(file) {
+            });
+            var newList = _to_consumable_array(files).concat(_to_consumable_array(processedFiles.filter(function(file) {
                 return files.filter(function(_file) {
                     if (typeof _file === "string") return false;
                     return _file.name === file.name;
@@ -691,29 +808,13 @@ var ReactImagePicker = function(_param) {
         }
     }), getRootProps = _ref.getRootProps, getInputProps = _ref.getInputProps;
     React.useEffect(function() {
-        var processedFiles = images.map(function(file) {
-            if (_instanceof(file, File)) {
-                return Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                });
-            }
-            return file;
-        });
-        setFiles(processedFiles);
+        setFiles(images);
     }, [
         images
     ]);
-    React.useEffect(function() {
-        return function() {
-            files.forEach(function(file) {
-                return URL.revokeObjectURL(file.preview);
-            });
-        };
-    }, [
-        files
-    ]);
     var reachedLimit = maxFiles ? files.length >= maxFiles : false;
     var size = 115;
+    console.log(files);
     var _ref1;
     return /* @__PURE__ */ React.createElement(Container, {
         className: className,
@@ -729,15 +830,11 @@ var ReactImagePicker = function(_param) {
             "--image-gap-value": imageGap,
             "--image-border-radius-value": imageBorderRadius
         }
-    }, files.map(function(file) {
+    }, files.map(function(file, index) {
         var fileIsString = typeof file === "string";
-        var _file = fileIsString ? {
-            name: file,
-            preview: file
-        } : file;
-        var src = typeof _file === "string" ? _file : _file.preview;
+        var previewUrl = previewUrls[index] || (fileIsString ? file : "");
         var imgProps = {
-            src: src,
+            src: previewUrl !== null && previewUrl !== void 0 ? previewUrl : "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNhYWEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBQcmV2aWV3PC90ZXh0Pjwvc3ZnPg==",
             width: size,
             height: size,
             style: _object_spread({
@@ -746,10 +843,10 @@ var ReactImagePicker = function(_param) {
                 width: "100%",
                 height: "100%"
             }),
-            alt: typeof _file === "string" ? _file : _file.name
+            alt: fileIsString ? file : file.name
         };
         return /* @__PURE__ */ React.createElement(ImageContainer, {
-            key: src,
+            key: index.toString(),
             singleImage: maxFiles === 1
         }, renderImage ? renderImage(imgProps) : /* @__PURE__ */ React.createElement("img", _object_spread({}, imgProps)), /* @__PURE__ */ React.createElement(Overlay, null, /* @__PURE__ */ React.createElement(DeleteButton, {
             color: "default",
@@ -757,7 +854,7 @@ var ReactImagePicker = function(_param) {
                 var _files = _to_consumable_array(files.filter(function(f) {
                     var isString = typeof f === "string";
                     var name = isString ? f : f.name;
-                    return name !== _file.name;
+                    return name !== (fileIsString ? file : file.name);
                 }));
                 setFiles(_files);
                 onImagesChanged(_files);
@@ -765,7 +862,7 @@ var ReactImagePicker = function(_param) {
             }
         }, deleteIcon !== null && deleteIcon !== void 0 ? deleteIcon : /* @__PURE__ */ React.createElement(DeleteIcon, null))));
     })), /* @__PURE__ */ React.createElement(Message, {
-        hasError: !!validationMessage || reachedLimit || hasError
+        hasError: !!validationMessage || hasError
     }, hasError ? message !== null && message !== void 0 ? message : "An error occurred" : isValidating ? "Validating..." : (_ref1 = validationMessage !== null && validationMessage !== void 0 ? validationMessage : message) !== null && _ref1 !== void 0 ? _ref1 : "Files up to ".concat((maxSize !== null && maxSize !== void 0 ? maxSize : 5 * 1024 * 1024) / (1024 * 1024), "MB, max ").concat(maxFiles, " files, accepted formats: ").concat(Array.isArray(accepted) ? accepted.join(", ") : accepted))));
 };
 var DeleteIcon = function() {

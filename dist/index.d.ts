@@ -25,7 +25,10 @@ type UploadImageArgs = {
 /**
  * The type of the function that will be called to upload the file
  */
-type UploadImageType = (args: UploadImageArgs) => Promise<string>;
+type UploadImageToFirebaseType = (args: UploadImageArgs) => Promise<{
+    url: string;
+    fileId: string;
+}>;
 /**
  * Rule with optional custom message
  */
@@ -207,6 +210,6 @@ declare const ReactImagePicker: React$1.FC<ReactImagePickerProps>;
  * @param {string} [path='Images'] The path to upload the file to
  * @returns {Promise<string>} The download URL of the uploaded file
  */
-declare const uploadImage: UploadImageType;
+declare const uploadImageToFirebase: UploadImageToFirebaseType;
 
-export { type FileValidationRules, type ImageType, ReactImagePicker, type ReactImagePickerProps, type RuleWithMessage, type UploadImageArgs, type UploadImageType, ReactImagePicker as default, type renderImageType, uploadImage };
+export { type FileValidationRules, type ImageType, ReactImagePicker, type ReactImagePickerProps, type RuleWithMessage, type UploadImageArgs, type UploadImageToFirebaseType, ReactImagePicker as default, type renderImageType, uploadImageToFirebase };

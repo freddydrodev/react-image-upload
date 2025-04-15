@@ -1,5 +1,5 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { UploadImageType } from "./types";
+import { UploadImageToFirebaseType } from "./types";
 
 /**
  * Uploads a file to Firebase Storage and returns the download URL.
@@ -9,13 +9,13 @@ import { UploadImageType } from "./types";
  * @param {string} [path='Images'] The path to upload the file to
  * @returns {Promise<string>} The download URL of the uploaded file
  */
-export const uploadImage: UploadImageType = async ({
+export const uploadImageToFirebase: UploadImageToFirebaseType = async ({
   file,
   storage,
   isProd = false,
   path = "Images",
-}): Promise<string> => {
-  if (typeof file === "string") return file;
+}) => {
+  if (typeof file === "string") return { url: file, fileId: "" };
 
   // The path is the full path including the filename, so we'll remove the trailing slash
   let _path = path.endsWith("/") ? path.slice(0, -1) : path;
@@ -38,6 +38,9 @@ export const uploadImage: UploadImageType = async ({
   // Get the download URL
   const url = await getDownloadURL(uploadTask.snapshot.ref);
 
+  // Get the file ID from the reference path
+  const fileId = uploadTask.snapshot.ref.fullPath;
+
   // Return the download URL
-  return url;
+  return { url, fileId };
 };

@@ -20,7 +20,11 @@ const Step2: React.FC<{
         <ImagePicker
           onImagesChanged={(images) => setImages(images)}
           images={images}
-          renderImage={(props) => <Image {...props} />}
+          renderImage={(props) => {
+            console.log(props);
+
+            return <Image {...props} />;
+          }}
           rules={{
             maxSize: {
               value: 2 * 1024 * 1024,

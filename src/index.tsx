@@ -2,7 +2,7 @@ import { ReactImagePicker } from "./ReactImagePicker";
 
 export * from "./types";
 
-export * from "./uploadImage";
+export * from "./uploadImageToFirebase";
 
 export default ReactImagePicker;
 

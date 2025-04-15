@@ -25,7 +25,9 @@ export type UploadImageArgs = {
 /**
  * The type of the function that will be called to upload the file
  */
-export type UploadImageType = (args: UploadImageArgs) => Promise<string>;
+export type UploadImageToFirebaseType = (
+  args: UploadImageArgs
+) => Promise<{ url: string; fileId: string }>;
 
 /**
  * Rule with optional custom message

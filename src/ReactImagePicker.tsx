@@ -456,6 +456,8 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
               const previewUrl =
                 previewUrls[index] || (fileIsString ? file : "");
 
+              if (previewUrl === "") return null;
+
               const imgProps: renderImageType = {
                 src:
                   previewUrl ??

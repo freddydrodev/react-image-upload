@@ -208,7 +208,6 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
       }
     });
 
-    console.log("PREVIEW URLS =>", urls);
     setPreviewUrls(urls);
   }, [files]);
 
@@ -323,8 +322,6 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
         return error.message;
       });
 
-      console.log("ERRORS REJECTED =>", errors);
-
       const uniqueErrors = errors.filter(
         (error, index, self) => self.indexOf(error) === index
       );
@@ -347,8 +344,6 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
       const validationErrors = acceptedFiles
         .map((file) => validateFile(file, rules))
         .filter((error): error is string => error !== null);
-
-      console.log("ERRORS =>", validationErrors);
 
       if (validationErrors.length > 0) {
         setValidationMessage(validationErrors.join("\n"));
@@ -428,8 +423,6 @@ export const ReactImagePicker: React.FC<ReactImagePickerProps> = ({
   const reachedLimit = maxFiles ? files.length >= maxFiles : false;
 
   let size = 115;
-
-  console.log(files);
 
   return (
     <Container className={className} style={style}>

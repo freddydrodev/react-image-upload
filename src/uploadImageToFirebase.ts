@@ -1,5 +1,6 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { UploadImageToFirebaseType } from "./types";
+import { nanoid } from "nanoid";
 
 /**
  * Uploads a file to Firebase Storage and returns the download URL.
@@ -24,7 +25,10 @@ export const uploadImageToFirebase: UploadImageToFirebaseType = async ({
   if (!_path.trim().length) _path = "Images";
 
   // The full path is the path plus the filename
-  const fullPath = `${isProd ? "" : "DEV/"}${_path}/${file.name}`;
+  const extension = file.name.split(".").pop();
+  const fullPath = `${
+    isProd ? "PROD" : "DEV"
+  }/${_path}/${nanoid()}.${extension}`;
 
   // Create a reference to the file
   const storageRef = ref(storage, fullPath);
